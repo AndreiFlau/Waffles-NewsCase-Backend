@@ -33,7 +33,8 @@ const processWebhook = asyncHandler(async (req, res) => {
 
     res.status(200).json({ message: "Webhook processado corretamente" });
   } catch (error) {
-    res.status(400).send(error);
+    const err = error as Error;
+    res.status(400).send(`Erro no processamento do webhook: ${err.message || err}`);
   }
 });
 

@@ -11,7 +11,7 @@ async function getUserById(id: number) {
   const user = result.rows[0];
   return {
     id: user.id,
-    name: user.email,
+    email: user.email,
     createdAt: user.created_at,
     admin: user.admin,
   };
@@ -28,7 +28,7 @@ async function getUserByEmail(email: string) {
   const user = result.rows[0];
   return {
     id: user.id,
-    name: user.email,
+    email: user.email,
     createdAt: user.created_at,
     admin: user.admin,
   };
@@ -46,7 +46,7 @@ async function createUser(email: string, admin: boolean) {
   const user = result.rows[0];
   return {
     id: user.id,
-    name: user.email,
+    email: user.email,
     createdAt: user.created_at,
     admin: user.admin,
   };
