@@ -4,9 +4,19 @@ import { getUserByEmail } from "../db/userQueries";
 import dotenv from "dotenv";
 dotenv.config();
 
+function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
 const loginWithEmail = asyncHandler(async (req, res) => {
   try {
-    const email = req.body.email;
+    const email = String(req.body.email).toLowerCase();
+    if (!email || !isValidEmail(email)) {
+      res.status(400).json({ message: "Email inválido" });
+      return;
+    }
+
     const user = await getUserByEmail(email);
 
     if (!user) {

@@ -1,7 +1,8 @@
 import asyncHandler from "express-async-handler";
 import { createUser, getUserByEmail } from "../db/userQueries";
-import { createStreak } from "../db/streakQueries";
+import { createStreak, getStreakByUserId, updateStreak } from "../db/streakQueries";
 import { createEmailStats } from "../db/emailStatsQueries";
+import calculateStreak from "../services/calculateStreak";
 
 const processWebhook = asyncHandler(async (req, res) => {
   try {
@@ -23,13 +24,14 @@ const processWebhook = asyncHandler(async (req, res) => {
     let user = await getUserByEmail(email);
     if (!user) {
       user = await createUser(email, false);
+      //criar uma streak para ele
+      await createStreak(user.id);
+      //atualizar as estátisticas de email
+      await createEmailStats(user.id, newsletterId, utmSource, utmMedium, utmCampaign, utmChannel);
+    } else {
+      await calculateStreak(user.id);
+      await createEmailStats(user.id, newsletterId, utmSource, utmMedium, utmCampaign, utmChannel);
     }
-
-    //criar uma streak para ele
-    await createStreak(user.id);
-
-    //atualizar as estátisticas de email
-    await createEmailStats(user.id, newsletterId, utmSource, utmMedium, utmCampaign, utmChannel);
 
     res.status(200).json({ message: "Webhook processado corretamente" });
   } catch (error) {
