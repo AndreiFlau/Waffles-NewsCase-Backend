@@ -24,9 +24,20 @@ function authJWT(req: Request, res: Response, next: NextFunction) {
       res.status(403).send("Token Inválido");
       return;
     }
+
     req.user = user;
+
     next();
   });
+}
+
+//Middleware para evitar que usuários acessem quaisquer outros dados
+function checkUserAccess(req: Request, res: Response, next: NextFunction) {
+  if (req.user.userId !== req.params.userId && !req.user.isAdmin) {
+    res.status(403).json({ message: "Não Autorizado" });
+    return;
+  }
+  next();
 }
 
 function authAdmin(req: Request, res: Response, next: NextFunction) {
@@ -42,4 +53,4 @@ function authAdmin(req: Request, res: Response, next: NextFunction) {
   next();
 }
 
-export { authJWT, authAdmin };
+export { authJWT, authAdmin, checkUserAccess };

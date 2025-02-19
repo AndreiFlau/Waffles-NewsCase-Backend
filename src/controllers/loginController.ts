@@ -22,7 +22,11 @@ const loginWithEmail = asyncHandler(async (req, res) => {
     if (!user) {
       res.status(400).json({ message: "Usuário não existe" });
     } else {
-      const jwtToken = jwt.sign({ userId: user.id }, process.env.SECRETJWTPASS || "segredo", { expiresIn: "1h" });
+      const jwtToken = jwt.sign(
+        { userId: user.id, email: user.email, createdAt: user.createdAt, admin: user.admin },
+        process.env.SECRETJWTPASS || "segredo",
+        { expiresIn: "1h" }
+      );
       const formattedUser = { ...user, jwtToken };
 
       res.status(200).json(formattedUser);

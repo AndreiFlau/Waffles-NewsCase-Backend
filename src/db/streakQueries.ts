@@ -1,6 +1,24 @@
 import pool from "./pool";
 
-async function getStreakById(id: number) {
+async function getAllStreaksQuery() {
+  const result = await pool.query(
+    `
+	SELECT * FROM streaks 
+	`
+  );
+
+  const streak = result.rows[0];
+  return {
+    id: streak.id,
+    userId: streak.user_id,
+    currentStreak: streak.current_streak,
+    longestStreak: streak.longest_streak,
+    createdAt: streak.created_at,
+    updatedAt: streak.updated_at,
+  };
+}
+
+async function getStreakByIdQuery(id: number) {
   const result = await pool.query(
     `
 	SELECT * FROM streaks WHERE id = ($1)
@@ -19,7 +37,7 @@ async function getStreakById(id: number) {
   };
 }
 
-async function getStreakByUserId(userId: number) {
+async function getStreakByUserIdQuery(userId: number) {
   const result = await pool.query(
     `
 	SELECT * FROM streaks WHERE user_id = ($1)
@@ -66,4 +84,4 @@ async function updateStreak(userId: number, count: number) {
   );
 }
 
-export { getStreakById, getStreakByUserId, createStreak, updateStreak };
+export { getAllStreaksQuery, getStreakByIdQuery, getStreakByUserIdQuery, createStreak, updateStreak };
