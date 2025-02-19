@@ -20,18 +20,14 @@ const processWebhook = asyncHandler(async (req, res) => {
       return;
     }
 
-    //adicionar usuário se não existir
     let user = await getUserByEmail(email);
+    //adicionar usuário se não existir
     if (!user) {
       user = await createUser(email, false);
-      //criar uma streak para ele
-      await createStreak(user.id);
-      //atualizar as estátisticas de email
-      await createEmailStats(user.id, newsletterId, utmSource, utmMedium, utmCampaign, utmChannel);
-    } else {
-      await calculateStreak(user.id);
-      await createEmailStats(user.id, newsletterId, utmSource, utmMedium, utmCampaign, utmChannel);
     }
+
+    await calculateStreak(user.id);
+    await createEmailStats(user.id, newsletterId, utmSource, utmMedium, utmCampaign, utmChannel);
 
     res.status(200).json({ message: "Webhook processado corretamente" });
   } catch (error) {

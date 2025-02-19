@@ -1,17 +1,19 @@
 import pool from "./pool";
 
-async function getEmailStatsById(id: number) {
+async function getAllEmailStatsQuery() {
   const result = await pool.query(
     `
-	SELECT * FROM email_stats WHERE id = ($1)
-	`,
-    [id]
+	SELECT e.*, u.email 
+	FROM email_stats e
+	JOIN users u ON e.user_id = u.id
+	`
   );
 
   const emailStats = result.rows[0];
   return {
     id: emailStats.id,
     userId: emailStats.user_id,
+    email: emailStats.email,
     newsletterId: emailStats.newsletter_id,
     openedAt: emailStats.opened_at,
     utmSource: emailStats.utm_source,
@@ -21,10 +23,38 @@ async function getEmailStatsById(id: number) {
   };
 }
 
-async function getEmailStatsByUserId(userId: number) {
+async function getEmailStatsByIdQuery(id: number) {
   const result = await pool.query(
     `
-	SELECT * FROM email_stats WHERE user_id = ($1)
+	SELECT e.*, u.email 
+	FROM email_stats e
+	JOIN users u ON e.user_id = u.id 
+	WHERE e.id = ($1)
+	`,
+    [id]
+  );
+
+  const emailStats = result.rows[0];
+  return {
+    id: emailStats.id,
+    userId: emailStats.user_id,
+    email: emailStats.email,
+    newsletterId: emailStats.newsletter_id,
+    openedAt: emailStats.opened_at,
+    utmSource: emailStats.utm_source,
+    utmMedium: emailStats.utm_medium,
+    utmCampaign: emailStats.utm_campaign,
+    utmChannel: emailStats.utm_channel,
+  };
+}
+
+async function getEmailStatsByUserIdQuery(userId: number) {
+  const result = await pool.query(
+    `
+	SELECT e.*, u.email
+	FROM email_stats e
+	JOIN users u ON e.user_id = u.id
+	WHERE u.id = ($1)
 	`,
     [userId]
   );
@@ -33,6 +63,7 @@ async function getEmailStatsByUserId(userId: number) {
   return {
     id: emailStats.id,
     userId: emailStats.user_id,
+    email: emailStats.email,
     newsletterId: emailStats.newsletter_id,
     openedAt: emailStats.opened_at,
     utmSource: emailStats.utm_source,
@@ -65,4 +96,4 @@ async function createEmailStats(
   );
 }
 
-export { getEmailStatsById, getEmailStatsByUserId, createEmailStats };
+export { getAllEmailStatsQuery, getEmailStatsByIdQuery, getEmailStatsByUserIdQuery, createEmailStats };
