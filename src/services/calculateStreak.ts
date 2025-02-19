@@ -1,11 +1,11 @@
-import { createStreak, getStreakByUserId, updateStreak } from "../db/streakQueries";
+import { createStreak, getStreakByUserIdQuery, updateStreak } from "../db/streakQueries";
 
 async function calculateStreak(userId: number) {
   try {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    let streak = await getStreakByUserId(userId);
+    let streak = await getStreakByUserIdQuery(userId);
 
     if (!streak) {
       await createStreak(userId);

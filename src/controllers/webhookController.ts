@@ -1,6 +1,5 @@
 import asyncHandler from "express-async-handler";
 import { createUser, getUserByEmail } from "../db/userQueries";
-import { createStreak, getStreakByUserId, updateStreak } from "../db/streakQueries";
 import { createEmailStats } from "../db/emailStatsQueries";
 import calculateStreak from "../services/calculateStreak";
 
