@@ -1,6 +1,7 @@
 import { Router } from "express";
+import { getMyNewsletterHistory } from "../controllers/userController";
 const userRouter = Router();
 
-userRouter.post("/");
+userRouter.get("/newsletter", getMyNewsletterHistory);
 
 export default userRouter;
