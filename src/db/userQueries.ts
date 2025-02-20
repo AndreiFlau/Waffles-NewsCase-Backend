@@ -26,6 +26,11 @@ async function getUserByEmail(email: string) {
   );
 
   const user = result.rows[0];
+
+  if (!user) {
+    return false;
+  }
+
   return {
     id: user.id,
     email: user.email,
@@ -44,6 +49,7 @@ async function createUser(email: string, admin: boolean) {
   );
 
   const user = result.rows[0];
+
   return {
     id: user.id,
     email: user.email,

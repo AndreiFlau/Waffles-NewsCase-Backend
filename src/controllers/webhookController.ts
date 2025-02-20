@@ -5,14 +5,14 @@ import calculateStreak from "../services/calculateStreak";
 
 const processWebhook = asyncHandler(async (req, res) => {
   try {
-    const email = String(req.query.email);
-    const newsletterId = Number(req.query.id);
+    const email = String(req.body.email);
+    const newsletterId = Number(req.body.id);
 
     //utms
-    const utmSource = String(req.query.utm_source);
-    const utmMedium = String(req.query.utm_medium);
-    const utmCampaign = String(req.query.utm_campaign);
-    const utmChannel = String(req.query.utm_channel);
+    const utmSource = String(req.body.utm_source);
+    const utmMedium = String(req.body.utm_medium);
+    const utmCampaign = String(req.body.utm_campaign);
+    const utmChannel = String(req.body.utm_channel);
 
     if (isNaN(newsletterId)) {
       res.status(400).json({ message: "Id inválido" });

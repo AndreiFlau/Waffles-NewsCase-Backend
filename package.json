@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "dist/app.js",
 	"scripts": {
-		"start": "node dist/app.ts",
+		"start": "node dist/app.js",
 		"dev": "ts-node-dev --respawn --transpile-only src/app.ts",
 		"build": "tsc",
 		"build:watch": "tsc --watch",

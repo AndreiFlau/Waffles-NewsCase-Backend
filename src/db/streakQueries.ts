@@ -46,6 +46,10 @@ async function getStreakByUserIdQuery(userId: number) {
   );
 
   const streak = result.rows[0];
+  if (!streak) {
+    return false;
+  }
+
   return {
     id: streak.id,
     userId: streak.user_id,
