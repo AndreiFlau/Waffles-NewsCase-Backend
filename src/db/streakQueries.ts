@@ -18,6 +18,44 @@ async function getAllStreaksQuery() {
   };
 }
 
+async function getStreakRankQuery() {
+  const result = await pool.query(
+    `
+	SELECT * FROM streaks
+	ORDER BY current_streak DESC
+	LIMIT 10
+	`
+  );
+
+  const streaks = result.rows;
+
+  const formattedStats = streaks.map((streak) => {
+    const { id, user_id, current_streak, longest_streak, created_at, updated_at } = streak;
+    return {
+      id: id,
+      userId: user_id,
+      currentStreak: current_streak,
+      longestStreak: longest_streak,
+      createdAt: created_at,
+      updatedAt: updated_at,
+    };
+  });
+  return formattedStats;
+}
+
+async function getStreaksAvgQuery() {
+  const result = await pool.query(
+    `
+	SELECT AVG(streak) FROM streaks 
+	`
+  );
+
+  const streak = result.rows[0];
+  return {
+    streaksAvg: streak.avg,
+  };
+}
+
 async function getStreakByIdQuery(id: number) {
   const result = await pool.query(
     `
@@ -88,4 +126,12 @@ async function updateStreak(userId: number, count: number) {
   );
 }
 
-export { getAllStreaksQuery, getStreakByIdQuery, getStreakByUserIdQuery, createStreak, updateStreak };
+export {
+  getAllStreaksQuery,
+  getStreakByIdQuery,
+  getStreakByUserIdQuery,
+  createStreak,
+  updateStreak,
+  getStreaksAvgQuery,
+  getStreakRankQuery,
+};

@@ -1,5 +1,7 @@
 import asyncHandler from "express-async-handler";
 import { getAllEmailStatsQuery, getEmailStatsByIdQuery, getEmailStatsByUserIdQuery } from "../db/emailStatsQueries";
+import { getActiveUsersQuery } from "../db/userQueries";
+import { getStreakRankQuery } from "../db/streakQueries";
 
 const getAllEmailStats = asyncHandler(async (req, res) => {
   try {
@@ -33,4 +35,24 @@ const getEmailStatsById = asyncHandler(async (req, res) => {
   }
 });
 
-export { getAllEmailStats, getAllEmailStatsByUserId, getEmailStatsById };
+const getAllUsers = asyncHandler(async (req, res) => {
+  try {
+    const users = await getActiveUsersQuery();
+    res.status(200).json(users);
+  } catch (error) {
+    const err = error as Error;
+    res.status(400).send(`Erro ao receber todas as estátisticas de email: ${err.message || err}`);
+  }
+});
+
+const getStreakRank = asyncHandler(async (req, res) => {
+  try {
+    const rank = await getStreakRankQuery();
+    res.status(200).json(rank);
+  } catch (error) {
+    const err = error as Error;
+    res.status(400).send(`Erro ao receber todas as estátisticas de email: ${err.message || err}`);
+  }
+});
+
+export { getAllEmailStats, getAllEmailStatsByUserId, getEmailStatsById, getAllUsers, getStreakRank };

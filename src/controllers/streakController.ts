@@ -1,9 +1,19 @@
 import asyncHandler from "express-async-handler";
-import { getAllStreaksQuery, getStreakByIdQuery, getStreakByUserIdQuery } from "../db/streakQueries";
+import { getAllStreaksQuery, getStreakByIdQuery, getStreakByUserIdQuery, getStreaksAvgQuery } from "../db/streakQueries";
 
 const getAllStreaks = asyncHandler(async (req, res) => {
   try {
     const streaks = await getAllStreaksQuery();
+    res.status(200).json(streaks);
+  } catch (error) {
+    const err = error as Error;
+    res.status(400).send(`Erro ao receber todas as streaks: ${err.message || err}`);
+  }
+});
+
+const getStreakAverage = asyncHandler(async (req, res) => {
+  try {
+    const streaks = await getStreaksAvgQuery();
     res.status(200).json(streaks);
   } catch (error) {
     const err = error as Error;
@@ -44,4 +54,4 @@ const getStreakById = asyncHandler(async (req, res) => {
   }
 });
 
-export { getAllStreaks, getStreakByUserId, getStreakById, getMyStreak };
+export { getAllStreaks, getStreakByUserId, getStreakById, getMyStreak, getStreakAverage };

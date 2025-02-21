@@ -1,5 +1,27 @@
 import pool from "./pool";
 
+async function getActiveUsersQuery() {
+  const result = await pool.query(
+    `
+	SELECT * FROM users
+	`
+  );
+
+  const users = result.rows;
+
+  const formattedStats = users.map((user) => {
+    const { id, email, created_at, admin } = user;
+    return {
+      id,
+      email,
+      createdAt: created_at,
+      admin,
+    };
+  });
+
+  return { formattedStats };
+}
+
 async function getUserById(id: number) {
   const result = await pool.query(
     `
@@ -58,4 +80,4 @@ async function createUser(email: string, admin: boolean) {
   };
 }
 
-export { getUserById, getUserByEmail, createUser };
+export { getUserById, getUserByEmail, createUser, getActiveUsersQuery };

@@ -9,17 +9,35 @@ async function getAllEmailStatsQuery() {
 	`
   );
 
-  const emailStats = result.rows[0];
+  const emailStats = result.rows;
+
+  const formattedStats = emailStats.map((stat) => {
+    const {
+      id,
+      user_id: userId,
+      email,
+      newsletter_id: newsletterId,
+      opened_at: openedAt,
+      utm_source: utmSource,
+      utm_medium: utmMedium,
+      utm_campaign: utmCampaign,
+      utm_channel: utmChannel,
+    } = stat;
+
+    return {
+      id,
+      userId,
+      email,
+      newsletterId,
+      openedAt,
+      utmSource,
+      utmMedium,
+      utmCampaign,
+      utmChannel,
+    };
+  });
   return {
-    id: emailStats.id,
-    userId: emailStats.user_id,
-    email: emailStats.email,
-    newsletterId: emailStats.newsletter_id,
-    openedAt: emailStats.opened_at,
-    utmSource: emailStats.utm_source,
-    utmMedium: emailStats.utm_medium,
-    utmCampaign: emailStats.utm_campaign,
-    utmChannel: emailStats.utm_channel,
+    formattedStats,
   };
 }
 

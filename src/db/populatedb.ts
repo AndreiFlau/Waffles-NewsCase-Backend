@@ -46,20 +46,51 @@ CREATE TABLE IF NOT EXISTS user_badges (
 	UNIQUE (user_id, badge_id)
 );
 
-INSERT INTO users (email, admin) VALUES ('admin@thenews.digital', true);
+INSERT INTO users (email) VALUES
+('user1@example.com'),
+('user2@example.com'),
+('user3@example.com'),
+('user4@example.com'),
+('user5@example.com'),
+('user6@example.com'),
+('user7@example.com'),
+('user8@example.com'),
+('user9@example.com'),
+('user10@example.com');
 
 INSERT INTO streaks (user_id, current_streak, longest_streak)
-SELECT id, 40, 40 FROM users WHERE email = 'admin@thenews.digital';
+SELECT id, 
+	CASE 
+		WHEN id % 3 = 0 THEN 35
+		WHEN id % 2 = 0 THEN 15
+		ELSE 7
+	END AS current_streak,
+	CASE 
+		WHEN id % 3 = 0 THEN 35
+		WHEN id % 2 = 0 THEN 20
+		ELSE 10
+	END AS longest_streak
+FROM users;
 
-INSERT INTO badges (title, description) VALUES 
-('Leitor', 'Leu nossas notícias por 7 dias!'),
-('Leitor De Ouro', 'Leu nossas notícias por mais de 30 dias!');
+INSERT INTO email_stats (user_id, newsletter_id, utm_source, utm_medium, utm_campaign)
+SELECT id, 'post_1', 'email', 'newsletter', 'daily_digest' 
+FROM users;
+
+INSERT INTO email_stats (user_id, newsletter_id, utm_source, utm_medium, utm_campaign)
+SELECT id, 'post_2', 'email', 'newsletter', 'daily_digest' 
+FROM users;
+
+INSERT INTO email_stats (user_id, newsletter_id, utm_source, utm_medium, utm_campaign)
+SELECT id, 'post_3', 'email', 'newsletter', 'daily_digest' 
+FROM users;
 
 INSERT INTO user_badges (user_id, badge_id)
-SELECT u.id, b.id 
-FROM users u 
-CROSS JOIN badges b 
-WHERE u.email = 'admin@thenews.digital';
+SELECT s.user_id, b.id
+FROM streaks s
+CROSS JOIN badges b
+WHERE 
+    (b.title = 'Leitor' AND s.current_streak >= 7) OR
+    (b.title = 'Leitor De Ouro' AND s.current_streak >= 30);
 `;
 
 async function main() {
