@@ -12,7 +12,7 @@ declare global {
 }
 
 function authJWT(req: Request, res: Response, next: NextFunction) {
-  const token = req.header("Authorization")?.replace("bearer", "");
+  const token = req.header("Authorization")?.replace("bearer", "").trim();
 
   if (!token) {
     res.status(403).send("Acesso Negado");
