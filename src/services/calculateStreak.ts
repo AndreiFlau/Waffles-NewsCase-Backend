@@ -14,7 +14,7 @@ async function calculateStreak(userId: number) {
       const lastOpened = streak.updatedAt;
       lastOpened.setHours(0, 0, 0, 0);
 
-      const timeDifference = today.getTime() - lastOpened.getTime() / (1000 * 60 * 60 * 24);
+      const timeDifference = (today.getTime() - lastOpened.getTime()) / (1000 * 60 * 60 * 24);
 
       if (timeDifference === 1) {
         await updateStreak(userId, streak.currentStreak + 1);
