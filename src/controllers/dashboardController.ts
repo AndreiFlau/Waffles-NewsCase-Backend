@@ -1,7 +1,13 @@
 import asyncHandler from "express-async-handler";
-import { getAllEmailStatsQuery, getEmailStatsByIdQuery, getEmailStatsByUserIdQuery } from "../db/emailStatsQueries";
+import {
+  getAllEmailStatsQuery,
+  getEmailStatsByIdQuery,
+  getEmailStatsByUserIdQuery,
+  getNewsletterStatsByDateQuery,
+  getNewsletterOpenCountQuery,
+} from "../db/emailStatsQueries";
 import { getActiveUsersQuery } from "../db/userQueries";
-import { getStreakRankQuery } from "../db/streakQueries";
+import { getStreakRankQuery, getStreakStatsQuery } from "../db/streakQueries";
 
 const getAllEmailStats = asyncHandler(async (req, res) => {
   try {
@@ -55,4 +61,50 @@ const getStreakRank = asyncHandler(async (req, res) => {
   }
 });
 
-export { getAllEmailStats, getAllEmailStatsByUserId, getEmailStatsById, getAllUsers, getStreakRank };
+const getNewsletterOpenCount = asyncHandler(async (req, res) => {
+  try {
+    const stats = await getNewsletterOpenCountQuery();
+    res.status(200).json(stats);
+  } catch (error) {
+    const err = error as Error;
+    res.status(400).send(`Erro ao receber todas as estátisticas de email: ${err.message || err}`);
+  }
+});
+
+const getNewsletterByDate = asyncHandler(async (req, res) => {
+  try {
+    const days = Number(req.query.days);
+
+    if (isNaN(days)) {
+      res.status(400).json({ message: 'A query "days" deve ser um número válido.' });
+      return;
+    }
+
+    const stats = await getNewsletterStatsByDateQuery(days);
+    res.status(200).json(stats);
+  } catch (error) {
+    const err = error as Error;
+    res.status(400).send(`Erro ao receber todas as estátisticas de email: ${err.message || err}`);
+  }
+});
+
+const getStreakStats = asyncHandler(async (req, res) => {
+  try {
+    const stats = await getStreakStatsQuery();
+    res.status(200).json(stats);
+  } catch (error) {
+    const err = error as Error;
+    res.status(400).send(`Erro ao receber todas as estátisticas de email: ${err.message || err}`);
+  }
+});
+
+export {
+  getAllEmailStats,
+  getAllEmailStatsByUserId,
+  getEmailStatsById,
+  getAllUsers,
+  getStreakRank,
+  getNewsletterOpenCount,
+  getNewsletterByDate,
+  getStreakStats,
+};

@@ -109,6 +109,61 @@ async function getEmailStatsByUserIdQuery(userId: number) {
   };
 }
 
+async function getNewsletterOpenCountQuery() {
+  const result = await pool.query(
+    `
+SELECT 
+		e.newsletter_id, 
+		COUNT(e.opened_at) AS times_opened
+FROM email_stats e
+GROUP BY e.newsletter_id
+ORDER BY times_opened DESC;
+	`,
+    []
+  );
+
+  const stats = result.rows;
+
+  const formattedStats = stats.map((stat) => {
+    const { newsletter_id: newsletterId, times_opened: timesOpened } = stat;
+
+    return {
+      newsletterId,
+      timesOpened,
+    };
+  });
+  return {
+    formattedStats,
+  };
+}
+
+async function getNewsletterStatsByDateQuery(days: number) {
+  const result = await pool.query(
+    `
+SELECT DATE(opened_at) AS day, COUNT(*) AS times_opened
+FROM email_stats
+WHERE opened_at >= NOW() - INTERVAL '1 DAY' * ($1)
+GROUP BY day
+ORDER BY day ASC;
+	`,
+    [days]
+  );
+
+  const stats = result.rows;
+
+  const formattedStats = stats.map((stat) => {
+    const { day, times_opened: timesOpened } = stat;
+
+    return {
+      day,
+      timesOpened,
+    };
+  });
+  return {
+    formattedStats,
+  };
+}
+
 async function createEmailStats(
   userId: number,
   newsletterId: number,
@@ -132,4 +187,11 @@ async function createEmailStats(
   );
 }
 
-export { getAllEmailStatsQuery, getEmailStatsByIdQuery, getEmailStatsByUserIdQuery, createEmailStats };
+export {
+  getAllEmailStatsQuery,
+  getEmailStatsByIdQuery,
+  getEmailStatsByUserIdQuery,
+  createEmailStats,
+  getNewsletterOpenCountQuery,
+  getNewsletterStatsByDateQuery,
+};

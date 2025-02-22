@@ -56,6 +56,35 @@ async function getStreaksAvgQuery() {
   };
 }
 
+async function getStreakStatsQuery() {
+  const result = await pool.query(
+    `
+	SELECT 
+	CASE 
+		WHEN current_streak >= 30 THEN 'Lendário (30+)'
+		WHEN current_streak >= 7 THEN 'Engajado (7-29)'
+		WHEN current_streak >= 1 THEN 'Novo (1-6)'
+		ELSE 'Inativo'
+	END AS streak_category,
+	COUNT(*) AS total_users
+	FROM streaks
+	GROUP BY streak_category
+	ORDER BY total_users DESC;
+	`
+  );
+
+  const streaks = result.rows;
+
+  const formattedStats = streaks.map((streak) => {
+    const { streak_category: streakCategory, total_users: totalUsers } = streak;
+    return {
+      streakCategory,
+      totalUsers,
+    };
+  });
+  return formattedStats;
+}
+
 async function getStreakByIdQuery(id: number) {
   const result = await pool.query(
     `
@@ -134,4 +163,5 @@ export {
   updateStreak,
   getStreaksAvgQuery,
   getStreakRankQuery,
+  getStreakStatsQuery,
 };
