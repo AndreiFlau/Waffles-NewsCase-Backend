@@ -39,6 +39,41 @@ async function getUserById(id: number) {
   };
 }
 
+async function getMyBadgesQuery(id: number) {
+  const result = await pool.query(
+    `
+	SELECT 
+    ub.user_id,
+    b.id AS badge_id,
+    b.title,
+    b.description,
+    ub.earned_at
+  FROM user_badges ub
+  JOIN badges b ON ub.badge_id = b.id
+  WHERE ub.user_id = ($1);
+	`,
+    [id]
+  );
+
+  const badges = result.rows;
+
+  if (!badges || badges.length === 0) {
+    return false;
+  }
+
+  const formattedBadges = badges.map((badge) => {
+    const { badge_id, title, description, earned_at } = badge;
+
+    return {
+      id: badge_id,
+      title,
+      description,
+      earnedAt: earned_at,
+    };
+  });
+  return formattedBadges;
+}
+
 async function getUserByEmail(email: string) {
   const result = await pool.query(
     `
@@ -80,4 +115,4 @@ async function createUser(email: string, admin: boolean) {
   };
 }
 
-export { getUserById, getUserByEmail, createUser, getActiveUsersQuery };
+export { getUserById, getUserByEmail, createUser, getActiveUsersQuery, getMyBadgesQuery };

@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { getMyNewsletterHistory } from "../controllers/userController";
+import { getMyBadges, getMyNewsletterHistory } from "../controllers/userController";
 const userRouter = Router();
 
 userRouter.get("/newsletter", getMyNewsletterHistory);
+userRouter.get("/badges", getMyBadges);
 
 export default userRouter;
