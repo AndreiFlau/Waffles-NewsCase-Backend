@@ -21,18 +21,21 @@ async function getAllStreaksQuery() {
 async function getStreakRankQuery() {
   const result = await pool.query(
     `
-	SELECT * FROM streaks
-	ORDER BY current_streak DESC
-	LIMIT 10
+	SELECT s.*, u.email
+	FROM streaks s
+	JOIN users u ON s.user_id = u.id
+	ORDER BY s.current_streak DESC
+	LIMIT 10;
 	`
   );
 
   const streaks = result.rows;
 
   const formattedStats = streaks.map((streak) => {
-    const { id, user_id, current_streak, longest_streak, created_at, updated_at } = streak;
+    const { id, email, user_id, current_streak, longest_streak, created_at, updated_at } = streak;
     return {
       id: id,
+      email,
       userId: user_id,
       currentStreak: current_streak,
       longestStreak: longest_streak,
@@ -46,7 +49,7 @@ async function getStreakRankQuery() {
 async function getStreaksAvgQuery() {
   const result = await pool.query(
     `
-	SELECT AVG(streak) FROM streaks 
+	SELECT AVG(current_streak) FROM streaks 
 	`
   );
 

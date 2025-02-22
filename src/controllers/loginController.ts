@@ -25,7 +25,7 @@ const loginWithEmail = asyncHandler(async (req, res) => {
       const jwtToken = jwt.sign(
         { userId: user.id, email: user.email, createdAt: user.createdAt, admin: user.admin },
         process.env.SECRETJWTPASS || "segredo",
-        { expiresIn: "1h" }
+        { expiresIn: "1d" }
       );
       const formattedUser = { ...user, jwtToken };
 
