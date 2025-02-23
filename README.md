@@ -79,7 +79,7 @@ Com pesquisas sobre escalabilidade, eu entendo que ele poderia ser melhor, como 
 
 A maioria dos testes realizados foram testes manuais após implementações de componentes. Exemplos desses testes seria usar Postman para testar apis, checar "rede" no dev tools e navegar pelo website como um usuário navegaria.
 
-A outro parte dos testes foram testes unitários que checam se determinada função retorna os dados desejados.
+A outro parte dos testes foram testes unitários que checam se determinada função ou rota retorna os dados desejados.
 
 **Quanto tempo levou o desenvolvimento e testes?**
 
