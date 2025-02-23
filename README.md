@@ -1,6 +1,6 @@
 # Back-end do Case Desenvolvimento - Gamificação em the news
 
-Frontend pode ser visto [aqui](https://github.com/AndreiFlau/Waffles-NewsCase-Backend)
+Frontend pode ser visto [aqui](https://github.com/AndreiFlau/Waffles-NewsCase-Frontend)
 Email de admin para teste: admin@thenews.digital
 Email de usuário comum para teste: user6@example.com
 
