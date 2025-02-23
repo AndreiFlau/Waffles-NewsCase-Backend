@@ -85,4 +85,12 @@ A outro parte dos testes foram testes unitários que checam se determinada funç
 
 Os testes unitários demoraram algumas horas para serem feitos e foram feitos após o desenvolvimento da aplicação.
 
+## Sugestões de melhorias
+
+Seria interessante adicionar um sistema de níveis, onde o usuário ganharia experiência toda vez que ele acessar uma newsletter.
+
+Talvez também um sistema de recomendação, onde os usuários podem ganhar recompensas ao convidar amigos para se cadastrarem na newsletter.
+
+Uma ideia mais difícil de ser implementada, mas que deixaria os usuários ainda mais engajados seria um sistema de comunidade onde os usuários poderiam compartilhar feedback, dicas e conversar sobre a waffle ou tópicos similares.
+
 OBS: Infelizmente não consegui implementar o webhook de vocês. Eu tentei diferentes urls, mas não obtive nenhuma resposta do endpoint.
