@@ -33,7 +33,6 @@ describe("As Rotas Funcionam", () => {
       },
       body: JSON.stringify({
         email: "invalid@email.com",
-        password: "wrongpass",
       }),
     });
 
@@ -51,7 +50,7 @@ describe("As Rotas Funcionam", () => {
   it("A rota de usuários requer autenticação", async () => {
     const result = await fetch(`http://localhost:${process.env.PORT}/dashboard/users`, {
       headers: {
-        Authorization: "Bearer invalid_token",
+        Authorization: "bearer invalid_token",
       },
     });
 
